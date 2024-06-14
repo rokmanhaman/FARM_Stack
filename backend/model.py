@@ -3,11 +3,11 @@ from bson import ObjectId
 
 class Products(BaseModel):
 
-    _id : ObjectId
+    _id : ObjectId 
     producto : str
     precio_unitario : float
     precio_promos : float
-    promos : str 
+    promos : str = None 
     precio_referencia : str
     url : str
     date : str

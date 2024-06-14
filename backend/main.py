@@ -1,10 +1,22 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Path
 from fastapi.middleware.cors import CORSMiddleware
+from model import Products
+import asyncio
+from typing import List
+
+
+
+
+
+from database import (fetch_one_product, fetch_all_products, create_product)
 
 #app object
 app = FastAPI()
 
-origins = ['https://localhost:3000']
+origins = [
+    'http://localhost:3000',
+    'https://localhost:3000'
+    ]
 
 app.add_middleware(
     CORSMiddleware,
@@ -17,5 +29,18 @@ app.add_middleware(
 @app.get("/")
 def read_root():
     return  {"Ping" : "Pong"}
+
+@app.get("/items/{prod_id}", response_model= List[Products])
+async def read_item(prod_id: str = Path(..., min_length=7, max_length=7, description="un id de ejemplo es 3390322")):
+    # Buscar los items en la colección que coincidan con el ID
+    result = await fetch_one_product(prod_id)
+    
+    # Verificar si se encontraron elementos
+    if result:
+        return result
+    else:
+        raise HTTPException(status_code=404, detail="Item not found")    
+
+
 
 
