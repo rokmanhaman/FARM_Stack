@@ -30,8 +30,8 @@ app.add_middleware(
 def read_root():
     return  {"Ping" : "Pong"}
 
-@app.get("/items/{prod_id}", response_model= List[Products])
-async def read_item(prod_id: str = Path(..., min_length=7, max_length=7, description="un id de ejemplo es 3390322")):
+@app.get("/{prod_id}", response_model= List[Products])
+async def get_product_by_id(prod_id: str = Path(..., min_length=7, max_length=7, description="un id de ejemplo es 3390322")):
     # Buscar los items en la colección que coincidan con el ID
     result = await fetch_one_product(prod_id)
     
@@ -43,4 +43,13 @@ async def read_item(prod_id: str = Path(..., min_length=7, max_length=7, descrip
 
 
 
+@app.get("/products/{pag_id}", response_model= List[Products])
+async def get_products(pag_id: int = 1):
+    prod_by_page = 5
+    result = await fetch_all_products(pag_id, prod_by_page)
+    # Verificar si se encontraron elementos
+    if result:
+        return result
+    else:
+        raise HTTPException(status_code=404, detail="Item not found")    
 
