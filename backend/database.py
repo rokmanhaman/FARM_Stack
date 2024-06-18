@@ -5,12 +5,24 @@ from motor.motor_asyncio import AsyncIOMotorClient
 
 from datetime import datetime, timedelta
 
+
+
 uri ="mongodb://localhost:27017"
 
 client = AsyncIOMotorClient(uri)
 
 database = client.supermamidb
 collection = database.smProducts
+
+
+async def get_last_item_date():
+    # Obtener el último item ordenando por la fecha de forma descendente y limitando a 1
+    cursor = collection.find().sort("date", -1).limit(1)
+    async for document in cursor:
+        last_item_date = document["date"].split("T")[0]
+        last_item_date_datetime = datetime.strptime(last_item_date, '%Y-%m-%d')
+        next_day = (last_item_date_datetime + timedelta(days=1)).strftime('%Y-%m-%d')
+    return last_item_date, next_day
 
 
 async def fetch_one_product(prod_id):
@@ -22,39 +34,35 @@ async def fetch_one_product(prod_id):
         results.append(document)
     return results
 
-async def fetch_all_products(page_number, page_size):
-    products = []
+async def fetch_all_products(page_number, page_size, product_q, product_day):
+
     skip = (page_number - 1) * page_size
-    last_item = collection.find().sort({ "date": -1 }).limit(1)
+            
+    # Construir la consulta
+    ## DATE
+    if product_day is None:
 
-    async for document in last_item:
-        last_item_date = document["date"].split("T")[0] 
+        last_item_date, next_day= get_last_item_date()
 
-    if last_item_date:
-        # Convertir la cadena de fecha en objeto datetime
-        day_datetime = datetime.strptime(last_item_date, '%Y-%m-%d')
-        
-        # Calcular la fecha del siguiente día
-        next_day = (day_datetime + timedelta(days=1)).strftime('%Y-%m-%d')
-        
-        # Construir la consulta
-        query = {
-            "date": {
-                "$gte": last_item_date,
-                "$lt": next_day
-            }
-        }
+        query = {"date": {"$gte": last_item_date, "$lt": next_day }}
+    
+    else:
+        query = {"date": {"$gte": product_day, "$lt": ((datetime.strptime(product_day, '%Y-%m-%d'))+ timedelta(days=1)).strftime('%Y-%m-%d')}}
+    ## PRODUCT_Q
+    if product_q:
+        query["producto"] = {"$regex": product_q, "$options": "i"}
+    
 
-        # Realizar la consulta con skip y limit
-        cursor = collection.find(query).skip(skip).limit(page_size)
-        
+    print("despues")
+    print(query)
+    print(type(query))
+    # Realizar la consulta con skip y limit
+    cursor = collection.find(query).skip(skip).limit(page_size)
 
-        # Obtener los documentos en forma de lista
-        async for document in cursor:
-            print(Products(**document))
-            products.append(Products(**document))
+    resultados = await cursor.to_list(length=None)
+    return resultados
 
-    return products
+
 
 async def create_product(product):
     document = product
