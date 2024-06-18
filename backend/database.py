@@ -24,7 +24,7 @@ async def fetch_one_product(prod_id):
 
 async def fetch_all_products(page_number, page_size):
     products = []
-
+    skip = (page_number - 1) * page_size
     last_item = collection.find().sort({ "date": -1 }).limit(1)
 
     async for document in last_item:
@@ -36,24 +36,14 @@ async def fetch_all_products(page_number, page_size):
         
         # Calcular la fecha del siguiente día
         next_day = (day_datetime + timedelta(days=1)).strftime('%Y-%m-%d')
-
+        
         # Construir la consulta
         query = {
             "date": {
-                "$gte": day_datetime,
+                "$gte": last_item_date,
                 "$lt": next_day
             }
         }
-        
-        skip = (page_number - 1) * page_size
-
-        print(f"\nday_datetime: {last_item_date}")
-        print(f"\nnext_day: {next_day}")
-        print(f"\npage_number: {page_number}")
-        print(f"\npage_size: {page_size}")
-        print(f"\nskip: {skip}")
-        # Calcular el número de documentos a saltar
-        
 
         # Realizar la consulta con skip y limit
         cursor = collection.find(query).skip(skip).limit(page_size)

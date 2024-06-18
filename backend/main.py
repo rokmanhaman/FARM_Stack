@@ -30,7 +30,7 @@ app.add_middleware(
 def read_root():
     return  {"Ping" : "Pong"}
 
-@app.get("/{prod_id}", response_model= List[Products])
+@app.get("product/{prod_id}", response_model= List[Products])
 async def get_product_by_id(prod_id: str = Path(..., min_length=7, max_length=7, description="un id de ejemplo es 3390322")):
     # Buscar los items en la colección que coincidan con el ID
     result = await fetch_one_product(prod_id)
