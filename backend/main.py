@@ -4,12 +4,11 @@ from model import Products
 from typing import List, Annotated, Union
 
 
-from database import (fetch_one_product, fetch_all_products, create_product, get_last_item_date)
+from database import (fetch_one_product, fetch_all_products, create_product)
 
 #app object
 app = FastAPI()
 
-last_item_date, next_day= await get_last_item_date()
 
 origins = [
     'http://localhost:3000',
@@ -28,8 +27,14 @@ app.add_middleware(
 def read_root():
     return  {"Ping" : "Pong"}
 
-@app.get("product/{prod_id}", response_model= List[Products])
-async def get_product_by_id(prod_id: str = Path(..., min_length=7, max_length=7, description="un id de ejemplo es 3390322")):
+@app.get("/product/{prod_id}", response_model= List[Products])
+async def get_product_by_id(
+    prod_id: str = Path
+    (..., 
+     min_length=7, 
+     max_length=7, 
+     description="un id de ejemplo es 3390322"
+     )):
     # Buscar los items en la colección que coincidan con el ID
     result = await fetch_one_product(prod_id)
     
@@ -60,13 +65,12 @@ async def get_products(
         Union[str, None],
         Query(
             ...,
-            description="Fecha en formato YYYY-MM-DD",
+            description="Fecha en formato YYYY-MM-DD. example = ['2024-06-13' , '2024-06-14', '2023-08-11']",
             regex=r"^\d{4}-\d{2}-\d{2}$",
             alias="item-day",
             title="Fecha de consulta",
             min_length=10,
-            max_length=10,
-            example = last_item_date
+            max_length=10           
         ),
     ] = None,
 ):

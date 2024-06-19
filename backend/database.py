@@ -26,7 +26,7 @@ async def get_last_item_date():
 
 
 async def fetch_one_product(prod_id):
-    cursor = collection.find({"prod_id": prod_id}).sort("date", DESCENDING)
+    cursor = collection.find({"prod_id": prod_id}).sort("date", -1)
     results = []
     async for document in cursor:
         # Convertir ObjectId a string antes de agregarlo a la lista de resultados
@@ -42,7 +42,7 @@ async def fetch_all_products(page_number, page_size, product_q, product_day):
     ## DATE
     if product_day is None:
 
-        last_item_date, next_day= get_last_item_date()
+        last_item_date, next_day= await get_last_item_date()
 
         query = {"date": {"$gte": last_item_date, "$lt": next_day }}
     
