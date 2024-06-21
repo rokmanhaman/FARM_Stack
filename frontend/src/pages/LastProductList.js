@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/App.css';
 
-function App() {
+function LastProductList() {
   const [productos, setProductos] = useState([]);
 
   useEffect(() => {
@@ -58,4 +58,4 @@ function App() {
   );
 }
 
-export default App;
+export {LastProductList};

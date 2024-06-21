@@ -7,10 +7,10 @@ function Navbar() {
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/Home">Home</a>
+                        <a class="nav-link active" aria-current="page" href="/">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="/productos">LastProductList</a>
+                        <a class="nav-link" href="/products">LastProductList</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link" href="/ProductEvolution">ProductEvolution</a>
@@ -27,3 +27,5 @@ function Navbar() {
     </nav>
   );
 }
+
+export {Navbar}
