@@ -12,17 +12,16 @@ import {Contact} from './pages/Contact';
 function App() {
   return (
     <BrowserRouter>
-      <div className="App">
+      <React.Fragment>
         <Navbar />  
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/products" element={<LastProductList />} />
-          
+          <Route path="/products" element={<LastProductList />} /> 
           <Route path="/productevolution" element={<ProductEvolution />} />
           <Route path="/contact" element={<Contact />} />
           
         </Routes>
-      </div>
+      </React.Fragment>
     </BrowserRouter>
   );
 }
