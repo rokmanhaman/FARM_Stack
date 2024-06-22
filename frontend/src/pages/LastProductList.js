@@ -25,7 +25,7 @@ function LastProductList() {
   return (
     <React.Fragment>
       <h1>Productos</h1>
-      <table className="table">
+      <table className="table table table-success table-striped">  
         <thead>
           <tr>
             <th scope="col">#</th>
@@ -38,7 +38,7 @@ function LastProductList() {
             <th scope="col">URL</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody class="table-group-divider">
           {productos.map((producto, index) => (
             <tr key={producto.prod_id}>
               <th scope="row">{index + 1}</th>
