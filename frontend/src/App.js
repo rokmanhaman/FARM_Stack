@@ -3,11 +3,12 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-import {Navbar} from './Navbar'; 
+import {Navbar} from './components/Navbar'; 
 import {Home} from './pages/Home';
 import {LastProductList} from './pages/LastProductList';
 import {ProductEvolution} from './pages/ProductEvolution';
 import {Contact} from './pages/Contact';
+import './styles/App.css';
 
 function App() {
   return (

@@ -1,0 +1,19 @@
+.table{
+  text-align: left;
+  font-size: small;
+  margin-top: 10px; 
+  margin-bottom: 10px;
+  margin-left: 10px;
+  margin-right: 10px;
+
+}
+
+.pagination-buttons{
+  text-align: left;
+
+}  
+
+.flex{
+  background-color:aqua;
+  text-align: left;
+}

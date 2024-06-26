@@ -53,9 +53,9 @@ async def fetch_all_products(page_number, page_size, product_q, product_day):
         query["producto"] = {"$regex": product_q, "$options": "i"}
     
 
-    print("despues")
+
     print(query)
-    print(type(query))
+
     # Realizar la consulta con skip y limit
     cursor = collection.find(query).skip(skip).limit(page_size)
 
